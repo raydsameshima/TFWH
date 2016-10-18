@@ -1,0 +1,4 @@
+# TFWH
+THINKING FUNCTIONALLY with HASKELL (R. Bird)
+
+
