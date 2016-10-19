@@ -1,4 +1,5 @@
 > module Ch_03 where
+> import Test.QuickCheck
 
 Chapter 3
 Numbers
@@ -54,4 +55,45 @@ A simplified version of this class is:
   *Ch_03> floor 12.9
   12
 
+> until' :: (a -> Bool) -> (a -> a) -> a -> a
+> until' p f x = if p x 
+>                  then x
+>                  else until p f (f x)
+  
+  *Ch_03> until' (>100) (*7) 1
+  343
+  *Ch_03> 7^3
+  343
+
+> floor' x 
+>   | x >= 0    = helper x 0
+>   | otherwise = helper' x 0
+>   where
+>     helper a b
+>       | a < fromInteger b = (b-1)
+>       | otherwise = helper a (b+1)
+>     helper' a b
+>       | a >= fromInteger b = b
+>       | otherwise = helper' a (b-1)
+
+> prop_floor' x = floor x == floor' x
+>   where
+>     types = x :: Float
+  
+  *Ch_03> quickCheck prop_floor'
+  +++ OK, passed 100 tests.
+
+> floor'' x 
+>   | x < 0     =  until (`leq` x) (subtract 1) (-1)
+>   | otherwise = (until (x `lt`)  (+1)         1   ) -1 
+>   where 
+>     m `leq` x = fromInteger m <= x
+>     x `lt`  m = x < fromInteger m
+
+> prop_floor'' x = floor x == floor'' x
+>   where
+>     types = x :: Float
+
+  *Ch_03> quickCheck prop_floor''
+  +++ OK, passed 100 tests.
 
