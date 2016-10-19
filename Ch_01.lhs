@@ -2,6 +2,7 @@ Ch_01.lhs
 
 > module Ch_01 where
 > import Test.QuickCheck
+> import Data.List (sort)
 > import Data.Ratio
 
 Chapter 1
@@ -39,13 +40,19 @@ and use the universality of foldr:
 For 
   sum . map (2*) == (2*) . sum
 case, consider the base cases.
-  sum . map (2*) []
-   == sum []
+  sum . map (2*) $ []
+   == sum $ []
    == 0
 and
-  (2*) . sum []
+  (2*) . sum $ []
    == (2*) 0
    == 0
+
+  *Ch_01> sum . map (2*) $ []
+  0
+  *Ch_01> (2*) . sum $ []
+  0
+
 The induction cases are
   sum . map (2*) (x:xs)
    == sum ((2*x) : map (2*) xs)
@@ -81,3 +88,9 @@ Therefore, in each cases we have
   +++ OK, passed 100 tests.
   (0.23 secs, 198,732,072 bytes)
 
+> prop_ExA''' xs = (sum . sort) xs == sum xs
+>   where
+>     types = xs :: [Integer]
+
+  *Ch_01> quickCheck prop_ExA'''
+  +++ OK, passed 100 tests.
