@@ -1,4 +1,6 @@
 > module Ch_02 where
+> import Test.QuickCheck
+> import Data.Char (isAlpha, toLower)
 
 Chapter 2
 Expressions, types and values
@@ -98,3 +100,82 @@ Every Haskell type is a collection of right value and undefined.
 2.7 Haskell layout
 
 2.8 Exercises
+
+Exercise E
+
+> first :: (a -> Bool) -> [a] -> Maybe a
+> first _ [] = Nothing
+> first p (x:xs) 
+>   | p x       = Just x
+>   | otherwise = first p xs
+
+The number of functions of type
+  Maybe a -> Maybe a
+
+  Nothing -> Nothing
+          -> undefined
+  Just x  -> Nothing
+          -> Just y
+          -> undefined
+
+Exercise H
+
+> type CIN = String
+
+> getDigit :: Char -> Int
+> getDigit c = read [c]
+
+  *Ch_02> map getDigit "63245134"
+  [6,3,2,4,5,1,3,4]
+  *Ch_02> sum it
+  28
+
+> addSum :: CIN -- 8 digits
+>        -> CIN -- 10 digits (rest 2 digits are check sum)
+> addSum cin = cin ++ (show d) ++ (show m)
+>   where
+>     (d,m) = divMod num 10
+>     num = sum $ map getDigit cin
+
+  *Ch_02> addSum "63245134"
+  "6324513428"
+
+> valid :: CIN -> Bool
+> valid cin 
+>   | length cin == 10 = addSum (take 8 cin) == cin
+>   | otherwise        = False
+  
+  *Ch_02> valid "6324513428"
+  True
+  *Ch_02> valid "6324513426"
+  False
+  *Ch_02> valid "632451342838"
+  False
+
+Exercise I
+
+> palindrome :: IO ()
+> palindrome = do
+>   putStrLn "Enter a string:"
+>   str <- getLine
+>   if isP str 
+>     then putStrLn "Yes!"
+>     else putStrLn "No!"
+> -- Good to separate pure and impure (IO) parts of the functions.
+> isP :: String -> Bool
+> isP str = let str' = map toLower $ filter isAlpha str in
+>   reverse str' == str' 
+
+  *Ch_02 Data.Char> palindrome 
+  Enter a string:
+  Madam, I'm Adam
+  Yes!
+  *Ch_02 Data.Char> palindrome 
+  Enter a string:
+  A Man, a plan, a canal - Suez!
+  No!
+  *Ch_02 Data.Char> palindrome 
+  Enter a string:
+  Doc, note I dissent. A fast never prevents a fatness. I diet on cod.
+  Yes!
+
