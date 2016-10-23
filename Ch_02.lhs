@@ -1,4 +1,7 @@
+Ch_02.lhs
+
 > module Ch_02 where
+>
 > import Test.QuickCheck
 > import Data.Char (isAlpha, toLower)
 

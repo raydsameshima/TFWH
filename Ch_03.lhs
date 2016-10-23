@@ -1,3 +1,5 @@
+Ch_03.lhs
+
 > module Ch_03 where
 > import Test.QuickCheck
 
@@ -97,3 +99,66 @@ A simplified version of this class is:
   *Ch_03> quickCheck prop_floor''
   +++ OK, passed 100 tests.
 
+3.4 Natural numbers
+Peano axiom
+
+> data Nat = Zero | Succ Nat
+>          deriving (Show, Ord, Eq)
+>
+> instance Num Nat where -- (+),(*),abs,signum,fromInteger,(negate | (-))
+>   m + Zero   = m
+>   m + Succ n = Succ (m+n)
+>
+>   m * Zero   = Zero
+>   m * Succ n = m*n + m
+>
+>   abs n      = n
+>
+>   signum Zero     = Zero
+>   signum (Succ n) = Succ Zero
+>
+>   fromInteger x
+>     | x <= 0    = Zero
+>     | otherwise = Succ (fromInteger (x-1))   
+> 
+>   m - Zero = m
+>   Zero - _ = Zero -- (-) is total
+>   (Succ m) - (Succ n) = m-n
+
+Partial numbers
+Since Succ is a non-strict function,
+  Succ undefined
+is an element of Nat, so called a partial number.
+
+  *Ch_03> Zero == Succ undefined 
+  False
+  *Ch_03> Zero /= Succ undefined 
+  True
+
+In addition, there is another number:
+
+  *Ch_03> let inf = Succ inf
+  *Ch_03> :t inf
+  inf :: Nat
+  *Ch_03> Succ Zero == inf
+  False
+
+We can make Succ strict:
+
+> data Nat' = Zero' | Succ' !Nat'
+
+Exercise B
+
+  *Ch_03> :t (^)
+  (^) :: (Integral b, Num a) => a -> b -> a
+  *Ch_03> :t (^^)
+  (^^) :: (Fractional a, Integral b) => a -> b -> a
+  *Ch_03> :t (**)
+  (**) :: Floating a => a -> a -> a
+
+  *Ch_03> 2 ^ 2
+  4
+  *Ch_03> 2.5 ^^ 2
+  6.25
+  *Ch_03> 2.5 ** 2.5
+  9.882117688026186
