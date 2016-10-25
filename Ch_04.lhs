@@ -3,6 +3,7 @@ Ch_04.lhs
 > module Ch_04 where
 
 > import Data.List
+> import Data.Char 
 
 Chapter 4 Lists
 
@@ -18,6 +19,11 @@ is non-empty!
 
 4.2 Enumerations
 4.3 List comprehensions
+
+> map' f xs = [f x | x<-xs]
+> filter' p xs = [x | x<-xs, p x]
+> concat' xss = [x | xs <- xss, x <- xs]
+
 4.4 Some basic operations
 4.5 Concatenation
 append?
