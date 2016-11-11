@@ -43,7 +43,7 @@ Then use the laws of functional programming to massage the computation into one 
 
 A reasonable approach is to start with the given grid and to complete it by filling in every possible choice for the blank entries. 
 The result will be a list of filled grid.
-Then we can filter this list for those that do NOT contatin duplicates in any raw, box or column.
+Then we can filter this list for those that do NOT contain duplicates in any raw, box or column.
 
 > solve :: Grid -> [Grid]
 > solve = filter valid . completions
@@ -58,7 +58,7 @@ Let us work on completions.
 > 
 > choice :: Digit -> [Char]
 > choice d
->   | blank d   = digits -- "1234566789"
+>   | blank d   = digits -- ['1' .. '9']
 >   | otherwise = [d]
  
 Cartesian product
@@ -67,7 +67,7 @@ Cartesian product
 > cp []       = [[]]
 > cp (xs:xss) = [x:ys | x <- xs, ys <- yss]
 >   where
->     yss = cp xss 
+>     yss = cp xss -- cp xss is computed just once. 
 
 This definition guarantees that cp xss is computed just once.
 Here is an example.
@@ -199,11 +199,14 @@ Assuming about 20 of 81 entries are given, there are about
   *Ch_05> 9^61
   16173092699229880893718618465586445357583280647840659957609
 grids to check!
+
 Even worse, the minimum meaningful number of initial entries are 17:
   *Ch_05> 9^(81 -17)
   11790184577738583171520872861412518665678211592275841109096961
   *Ch_05> logBase 10 it
   61.07152060411679
+
+To make a more efficient solver, an obvious ide is to remove any choices from a cell c that already occur as singleton entries in the row, colmn and box containing c.
 
 
 
