@@ -206,7 +206,29 @@ Even worse, the minimum meaningful number of initial entries are 17:
   *Ch_05> logBase 10 it
   61.07152060411679
 
-To make a more efficient solver, an obvious ide is to remove any choices from a cell c that already occur as singleton entries in the row, colmn and box containing c.
+To make a more efficient solver, an obvious idea is to remove any choices from a cell c that already occur as singleton entries in the row, column and box containing c.
+This "singleton" means that the entry does not reappear in the row, column or box.
+
+Since a matrix is a list of rows, let us start pruning a single row.
+
+> pruneRow :: Row [Digit] -> Row [Digit]
+> pruneRow row = map (remove fixed) row
+>   where
+>     fixed = [d | [d] <- row]
+>
+> remove :: [Digit] -> [Digit] -> [Digit]
+> remove _  [x] = [x]
+> remove ds xs  = filter (`notElem` ds) xs
+  
+  *Ch_05> pruneRow ["6", "12","3","134","56"]
+  ["6","12","3","14","5"]
+  *Ch_05> pruneRow ["6","36","3","134","4"]
+  ["6","","3","1","4"]
+
+
+
+
+
 
 
 
