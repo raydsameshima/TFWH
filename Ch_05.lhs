@@ -225,6 +225,9 @@ Since a matrix is a list of rows, let us start pruning a single row.
   *Ch_05> pruneRow ["6","36","3","134","4"]
   ["6","","3","1","4"]
 
+The function pruneRow satisfies the following equation
+  filter nodups . cp = filter nodups . cp . pruneRow
+In words, this equation says that pruning a row will not throw away any list that contains no duplicates.
 
 
 
