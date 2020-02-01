@@ -1,6 +1,6 @@
-Ch_01.lhs
+Ch01.lhs
 
-> module Ch_01 where
+> module Ch01 where
 > import Test.QuickCheck
 > import Data.List (sort)
 > import Data.Ratio
@@ -9,6 +9,12 @@ Chapter 1
 What is functional programming?
 
 1.1 Functions and types
+We usually write
+  f(x)
+for the function applycation, but, e.g.,
+  sin t
+rather than sin(t).
+
 1.2 Functional composition
 1.3 Example: common words
 1.4 Example: numbers into words
@@ -94,3 +100,8 @@ Therefore, in each cases we have
 
   *Ch_01> quickCheck prop_ExA'''
   +++ OK, passed 100 tests.
+
+Exercise C
+  () parehtneses
+  [] brackets
+  {} braces
