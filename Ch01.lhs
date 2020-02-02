@@ -2,7 +2,10 @@ Ch01.lhs
 
 > module Ch01 where
 > import Test.QuickCheck
-> import Data.List (sort)
+> import qualified Data.ByteString.Char8 as C
+
+> import Data.Char (toLower)
+> import Data.List (group, sort, sortBy)
 > import Data.Ratio
 
 Chapter 1
@@ -17,6 +20,27 @@ rather than sin(t).
 
 1.2 Functional composition
 1.3 Example: common words
+Let me make it.
+
+> commonWords :: Int -> String -> String
+> -- commonWords = undefined
+>
+> sortWords :: [String] -> [String]
+> sortWords = sort 
+>
+> countRuns :: [String] -> [(Int, String)]
+> countRuns = map (\x -> (length x, head x)) . group . sort 
+>
+> sortRuns :: [(Int, String)] -> [(Int, String)]
+> sortRuns = sortBy (\(a,_) (b,_) -> compare b a)
+>
+> showRun :: (Int, String) -> String
+> showRun (n, s) = s ++ " " ++ show n ++ "\n"
+>
+> commonWords n = concat . map showRun . take n .
+>                 sortRuns . countRuns . sortWords .
+>                 words . map toLower
+
 1.4 Example: numbers into words
 1.5 The Haskell Platform
 1.6 Exercises
