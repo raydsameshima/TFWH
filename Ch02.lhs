@@ -5,7 +5,7 @@ Ch02.lhs
 > import Ch01 (commonWords)
 >
 > import Test.QuickCheck
-> import Data.Char (isAlpha, toLower)
+> import Data.Char (isAlpha, toLower, digitToInt)
 
 Chapter 2
 Expressions, types and values
@@ -121,11 +121,12 @@ It reads the text from a file
 and writes the output to a file
    outfile :: FilePath
 where FilePath is a synomym for String.
-
+(See also ex2_6.hs as another example.)
 
 2.6 Modules
 
 2.7 Haskell layout
+offside rule
 
 2.8 Exercises
 
@@ -179,6 +180,50 @@ Exercise H
   False
   *Ch_02> valid "632451342838"
   False
+
+
+Luhn algorithm
+
+*Ch02> map digitToInt $ show 49927398716
+[4,9,9,2,7,3,9,8,7,1,6]
+
+*Ch02> let ns = it
+*Ch02> zip ns $ cycle [False, True]
+[(4,False),(9,True),(9,False),(2,True),(7,False),(3,True),(9,False),(8,True),(7,False),(1,True),(6,False)]
+
+*Ch02> ms = [x | (y, b) <- it, let x = if b then (2*y) else y]
+
+*Ch02> ms
+[4,18,9,4,7,6,9,16,7,2,6]
+
+*Ch02> os = [x | y <- ms, let x = if y<10 then y else (1 + y `mod` 10)] 
+*Ch02> os
+[4,9,9,4,7,6,9,7,7,2,6]
+*Ch02> sum it
+70
+
+> luhn :: Integer -> Bool
+> luhn n = if n' `mod` 10 == 0
+>            then True
+>            else False
+>   where 
+>     n' = sum . preSum . double' . toDigits $ n
+>
+> toDigits :: Integer -> [Int]
+> toDigits = map digitToInt . show
+>
+> double', preSum :: [Int] -> [Int]
+>
+> double' ds = 
+>   [x | (y,b) <- zip ds (cycle [False, True])
+>      , let x = if b then (2*y) else y]
+>
+> preSum ds = 
+>   [x | y <- ds
+>      , let x = if y<10 then y else (1 + y `mod` 10)]
+>
+
+
 
 Exercise I
 
