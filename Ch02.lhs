@@ -1,6 +1,8 @@
-Ch_02.lhs
+Ch02.lhs
 
-> module Ch_02 where
+> module Ch02 where
+>
+> import Ch01 (commonWords)
 >
 > import Test.QuickCheck
 > import Data.Char (isAlpha, toLower)
@@ -36,7 +38,7 @@ Sections and lambda expressions
 2.3 Evaluation
 Eager and Lazy evaluations.
   sqr x = x*x
-
+    (eager)              (lazy)
   sqr (3+4)            sqr (3+4)
    == sqr 7             == let x = (3+4) in x*x
    == let x = 7 in x*x  == let x = 7 in x*x
@@ -85,6 +87,7 @@ Lazy evaluation requires much more space to achieve the answer, the expression
   1*(2*(3*1))
 is built up in memory before being evaluated.
 
+The pros and cons (its advantages and disadvantages)
 Lazy evaluation terminates whenever ANY reduction order terminates; it never takes more steps than eager evaluation, and sometimes infinitely fewer.
 However, it can require a lot more space and it is more difficult to understand the precise order in which things happen.
 
@@ -97,6 +100,28 @@ For example, three is non-strict, while (+) is strict in both arguments.
 Every Haskell type is a collection of right value and undefined.
 
 2.5 Printing values
+Printing the result involves the use of a function
+  putStrLn :: String -> IO()
+The type
+  IO a
+is a special type, in which we can employ IO computations that when executed have some interaction with outside world and return a value of type a.
+When we do not need the returned value, as with putStrLn, we can use the null-tuple value
+  () :: ().
+
+To see an example, let us consider the follwoing program:
+
+> cwords :: Int -> FilePath -> FilePath -> IO ()
+> cwords n infile outfile = do
+>   text <- readFile infile
+>   writeFile outfile (commonWords n text)
+>   putStrLn "cwords done!"
+
+It reads the text from a file
+   infile :: FilePath
+and writes the output to a file
+   outfile :: FilePath
+where FilePath is a synomym for String.
+
 
 2.6 Modules
 
