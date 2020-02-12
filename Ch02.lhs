@@ -6,6 +6,7 @@ Ch02.lhs
 >
 > import Test.QuickCheck
 > import Data.Char (isAlpha, toLower, digitToInt)
+> import Data.List (reverse)
 
 Chapter 2
 Expressions, types and values
@@ -183,6 +184,7 @@ Exercise H
 
 
 Luhn algorithm
+https://www.rosettacode.org/wiki/Luhn_test_of_credit_card_numbers
 
 *Ch02> map digitToInt $ show 49927398716
 [4,9,9,2,7,3,9,8,7,1,6]
@@ -207,7 +209,7 @@ Luhn algorithm
 >            then True
 >            else False
 >   where 
->     n' = sum . preSum . double' . toDigits $ n
+>     n' = sum . preSum . double' . reverse . toDigits $ n
 >
 > toDigits :: Integer -> [Int]
 > toDigits = map digitToInt . show
@@ -220,10 +222,7 @@ Luhn algorithm
 >
 > preSum ds = 
 >   [x | y <- ds
->      , let x = if y<10 then y else (1 + y `mod` 10)]
->
-
-
+>      , let x = if y < 10 then y else (1 + y `mod` 10)]
 
 Exercise I
 
