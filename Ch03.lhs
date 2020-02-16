@@ -2,6 +2,8 @@ Ch03.lhs
 
 > module Ch03 where
 > import Test.QuickCheck ( quickCheck )
+>
+> import Prelude hiding ( divMod )
 
 Chapter 3
 Numbers
@@ -178,7 +180,7 @@ O(log n) floor:
 Peano axiom
 
 > data Nat = Zero | Succ Nat
->          deriving (Show, Ord, Eq)
+>          deriving (Show, Eq)
 >
 > instance Num Nat where 
 > -- (+),(*),abs,signum,fromInteger,(negate | (-))
@@ -228,7 +230,7 @@ In addition, there is another number:
 We can make Succ strict:
 
 > data Nat' = Zero' | Succ' !Nat'
-> --                        * strictnell flag                          
+> --                        ^ strictnell flag                          
 
 If we set such flag, our Nat' becomes just a set of finite numbers.
 
@@ -257,4 +259,25 @@ Even my one does not work properly:
   *Ch03> dickFloor $ 1.23e7
   1
   (0.00 secs, 111,112 bytes)
+
+Exercise G
+Let me use one of the minimal complete definitions: compare.
+
+> instance Ord Nat where
+>   Zero   `compare` Zero   = EQ
+>   Zero   `compare` Succ _ = LT
+>   Succ _ `compare` Zero   = GT
+>   Succ a `compare` Succ b = a `compare` b
+>
+> divMod :: Nat -> Nat -> (Nat, Nat)
+> divMod x y 
+>   | x < y     = (Zero, x)
+>   | otherwise = (Succ q, r)
+>   where
+>     (q,r) = divMod (x-y) y
+
+  *Ch03> divMod 9 4
+  (Succ (Succ Zero),Succ Zero)
+  *Ch03> Prelude.divMod 9 4
+  (2,1)
 
